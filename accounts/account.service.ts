@@ -6,8 +6,6 @@ import { Op } from 'sequelize';
 import sendEmail from '../_helpers/send-email';
 import db from '../_helpers/db';
 import Role from '../_helpers/role';
-import { ref } from 'process';
-import { func } from 'joi';
 
 export default {
     authenticate,

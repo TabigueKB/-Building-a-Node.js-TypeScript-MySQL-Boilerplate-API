@@ -5,7 +5,6 @@ import validateRequest from '../_middleware/validate-request';
 import authorize from '../_middleware/authorize';
 import Role from '../_helpers/role';
 import accountService from './account.service';
-import { title } from 'node:process';
 
 router.post('/authenticate', authenticateSchema, authenticate);
 router.post('/refresh-token', refreshToken);
@@ -22,6 +21,14 @@ router.put('/:id', authorize(), updateSchema, update);
 router.delete('/:id', authorize(), _delete);
 
 export default router;
+
+function authenticateSchema(req: any, res: any, next: any) {
+    const schema = Joi.object({
+        email: Joi.string().required(),
+        password: Joi.string().required()
+    });
+    validateRequest(req, next, schema);
+}
 
 function authenticate(req: any, res: any, next: any) {
     const { email, password } = req.body;
@@ -65,13 +72,6 @@ function registerSchema(req: any, res: any, next: any) {
         confirmPassword: Joi.string().valid(Joi.ref('password')).required()
     });
 
-    validateRequest(req, next, schema);
-}
-function authenticateSchema(req: any, res: any, next: any) {
-    const schema = Joi.object({
-        email: Joi.string().required(),
-        password: Joi.string().required()
-    });
     validateRequest(req, next, schema);
 }
 function refreshToken(req: any, res: any, next: any) {
